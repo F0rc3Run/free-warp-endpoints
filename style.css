@@ -1,0 +1,121 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 50%, #f0f0f0 100%); /* پس‌زمینه سفید با سایه */
+    color: #333;
+    margin: 0;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden; /* جلوگیری از اسکرول افقی */
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    background-color: rgba(255, 255, 255, 0.8); /* پس‌زمینه نیمه‌شفاف برای هدر */
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo-container {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+h1 {
+    color: #2e7d32; /* سبز تیره */
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.force-run-explanation, .suggestion-text {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: 0.95em;
+}
+
+#status {
+    font-style: italic;
+    color: #777;
+    margin-bottom: 20px;
+}
+
+main {
+    width: 90%;
+    max-width: 800px;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+th {
+    background-color: #d32f2f; /* قرمز */
+    color: white;
+    font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+    background-color: #e0f2f7; /* آبی روشن برای هاور */
+}
+
+.copy-btn {
+    background-color: #4caf50; /* سبز روشن */
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.copy-btn:hover {
+    background-color: #388e3c; /* سبز تیره‌تر برای هاور */
+}
+
+.latency {
+    font-weight: bold;
+}
+
+.latency.fast {
+    color: #2e7d32; /* سبز */
+}
+
+.latency.medium {
+    color: #f9a825; /* زرد/نارنجی */
+}
+
+.latency.slow {
+    color: #d32f2f; /* قرمز */
+}
