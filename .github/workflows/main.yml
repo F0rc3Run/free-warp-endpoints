@@ -9,11 +9,11 @@ jobs:
   scan-and-commit:
     runs-on: ubuntu-latest
     steps:
-      # ۱. ریپازیتوری شما را برای ذخیره نتایج آماده می‌کند
+      # ۱. ریپازیتوری شما را آماده می‌کند
       - name: Checkout Your Repository
         uses: actions/checkout@v4
 
-      # ۲. کد منبع اسکنر Go را از گیت‌هاب دانلود می‌کند
+      # ۲. کد منبع اسکنر Go را دانلود می‌کند
       - name: Checkout BPB-Warp-Scanner
         uses: actions/checkout@v4
         with:
@@ -24,22 +24,20 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.21' # یک نسخه پایدار از Go
+          go-version: '1.21'
 
       # ۴. ابزار را از کد منبع کامپایل می‌کند
       - name: Build the Go application
-        # وارد پوشه سورس شده و برنامه را کامپایل می‌کنیم
-        # خروجی کامپایل شده در مسیر اصلی با نام 'scanner' ذخیره می‌شود
         run: |
           cd scanner-source
           go build -o ../scanner .
 
-      # ۵. اسکنر کامپایل شده را اجرا می‌کند
+      # ۵. اسکنر کامپایل شده را با دستور صحیح اجرا می‌کند
       - name: Run Scanner
-        # فایل اجرایی که در مرحله قبل ساختیم را اجرا می‌کنیم
-        run: ./scanner -f results.json
+        # *** تغییر اصلی: حذف فلگ -f و استفاده از آرگومان مستقیم ***
+        run: ./scanner results.json
 
-      # ۶. فایل نتایج جدید را در ریپازیتوری شما کامیت می‌کند
+      # ۶. فایل نتایج جدید را کامیت می‌کند
       - name: Commit and push results
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
