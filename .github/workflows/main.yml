@@ -9,41 +9,24 @@ jobs:
   scan-and-commit:
     runs-on: ubuntu-latest
     steps:
-      # ۱. ریپازیتوری شما را آماده می‌کند
-      - name: Checkout Your Repository
-        uses: actions/checkout@v4
+      # ... (تمام مراحل قبلی بدون تغییر باقی می‌مانند) ...
 
-      # ۲. کد منبع اسکنر Go را دانلود می‌کند
-      - name: Checkout BPB-Warp-Scanner
-        uses: actions/checkout@v4
-        with:
-          repository: 'bia-pain-bache/BPB-Warp-Scanner'
-          path: 'scanner-source'
-
-      # ۳. محیط زبان Go را آماده می‌کند
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.21'
-      
-      # ۴. ابزار را از کد منبع کامپایل می‌کند
       - name: Build the Go application
         run: |
           cd scanner-source
           go build -o ../scanner .
 
-      # ۵. هسته Xray را دانلود و آماده می‌کند
       - name: Download and Set up Xray Core
         run: |
           wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
           mkdir core
           unzip Xray-linux-64.zip -d core
 
-      # ۶. اسکنر را اجرا می‌کند
-      - name: Run Scanner
-        run: ./scanner results.json
+      # --- مرحله‌ای که تغییر کرده است ---
+      - name: Run Scanner and Select Option 2
+        # با دستور echo "3" | به صورت خودکار گزینه ۳ را برای اسکنر انتخاب می‌کنیم
+        run: echo "2" | ./scanner results.json
 
-      # ۷. فایل نتایج را کامیت می‌کند
       - name: Commit and push results
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
