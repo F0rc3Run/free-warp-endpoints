@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // آدرس لیست اندپوینت‌ها برای تست
-    const endpointListUrl = 'https://raw.githubusercontent.com/vfarid/cf-ip-scanner/main/results.json';
+    // *** تغییر اصلی: آدرس فایل به صورت محلی و مستقیم تنظیم شده است ***
+    const endpointListUrl = 'results.json';
 
     const startBtn = document.getElementById('start-scan-btn');
     const outputContainer = document.getElementById('output-container');
@@ -36,13 +36,14 @@ document.addEventListener('DOMContentLoaded', () => {
         icon.classList.add('processing');
         outputContainer.style.display = 'none';
         scanResultsDiv.innerHTML = '';
-        statusText.textContent = 'در حال دریافت لیست سرورها...';
+        statusText.textContent = 'در حال خواندن لیست سرورها...';
 
         try {
-            // *** تغییر اصلی اینجاست: افزودن پارامتر زمان برای دور زدن کش ***
+            // از Cache Busting استفاده می‌کنیم تا همیشه آخرین نسخه فایل خوانده شود
             const response = await fetch(`${endpointListUrl}?v=${new Date().getTime()}`);
             
-            if (!response.ok) throw new Error('Network error while fetching list');
+            if (!response.ok) throw new Error('فایل results.json پیدا نشد. مطمئن شوید که در کنار فایل‌های دیگر وجود دارد.');
+            
             const data = await response.json();
 
             const raw_ipv4_list = data.ipv4 || [];
@@ -58,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return { ip, port };
             }).filter(Boolean);
 
-            if (endpoints.length === 0) throw new Error('Endpoint list is empty or invalid.');
+            if (endpoints.length === 0) throw new Error('لیست سرورها خالی یا نامعتبر است.');
 
             statusText.textContent = `تعداد ${endpoints.length} سرور یافت شد. شروع تست پینگ...`;
 
