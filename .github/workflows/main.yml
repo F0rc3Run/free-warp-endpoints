@@ -1,4 +1,4 @@
-name: Scan and Update Endpoint List
+name: Run BPB Warp Scanner
 
 on:
   workflow_dispatch: # اجازه اجرای دستی
@@ -6,29 +6,38 @@ on:
     - cron: '0 */6 * * *' # هر ۶ ساعت یکبار
 
 jobs:
-  scan:
+  scan-and-commit:
     runs-on: ubuntu-latest
     steps:
-      # ۱. کد ریپازیتوری شما را دانلود می‌کند
-      - name: Checkout repository
+      # ۱. ابتدا کد ریپازیتوری خودتان را دانلود می‌کند تا بتواند فایل نتایج را در آن ذخیره کند
+      - name: Checkout Your Repository
         uses: actions/checkout@v4
 
-      # ۲. ابزار اسکنر را با لینک جدید و صحیح دانلود می‌کند
-      - name: Download Scanner
-        run: |
-          # تغییر اصلی اینجاست: استفاده از لینک دانلود صحیح
-          wget https://github.com/boypt/Cloudscanner/releases/latest/download/Cloudscanner_linux_amd64.zip
-          unzip Cloudscanner_linux_amd64.zip
-          chmod +x cloudscanner
-      
-      # ۳. اسکنر را برای پیدا کردن IP های فعال اجرا می‌کند
-      - name: Run Scanner to find live endpoints
-        # نام فایل اجرایی پس از استخراج، حروف کوچک است
-        run: ./cloudscanner -p 10 -t 4 -o results.json
+      # ۲. ابزار اسکنر BPB را از گیت‌هاب دانلود می‌کند
+      - name: Checkout BPB-Warp-Scanner
+        uses: actions/checkout@v4
+        with:
+          repository: 'bia-pain-bache/BPB-Warp-Scanner'
+          # فایل‌های اسکنر در یک پوشه جداگانه به نام scanner دانلود می‌شود
+          path: 'scanner'
 
-      # ۴. فایل نتایج جدید را به ریپازیتوری شما کامیت می‌کند
-      - name: Commit and push if changed
+      # ۳. محیط پایتون را برای اجرای اسکریپت آماده می‌کند
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # ۴. اسکریپت اسکنر را اجرا می‌کند
+      - name: Run Scanner
+        # با دستور cd وارد پوشه اسکنر شده و اسکریپت را اجرا می‌کنیم
+        # خروجی در فایل results.json در ریشه اصلی ریپازیتوری شما ذخیره می‌شود
+        run: |
+          cd scanner
+          python3 warp_scanner.py ../results.json
+
+      # ۵. اگر فایل results.json جدید بود، آن را به ریپازیتوری شما کامیت می‌کند
+      - name: Commit and push results
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Automated: Updated endpoint list via scanner"
+          commit_message: "Automated: Update warp endpoints via BPB Scanner"
           file_pattern: results.json
