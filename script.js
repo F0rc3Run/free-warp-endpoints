@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     ws.close();
                 }
                 resolve(null);
-            }, 2000);
+            }, 5000);
         });
     }
 
