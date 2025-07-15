@@ -37,9 +37,8 @@ jobs:
 
       # --- تغییر اصلی در این مرحله است ---
       - name: Run Scanner and Select All Options
-        # با دستور printf هر چهار گزینه را به ترتیب انتخاب می‌کنیم
-        # 2=Normal Scan, 3=IPv4 & IPv6, 2=Warp is OK, 1=Default Noise
-        run: printf "2\n3\n2\n1" | ./scanner results.json
+        # با دستور printf تمام ۵ گزینه منو را به ترتیب انتخاب می‌کنیم
+        run: printf "2\n3\n2\n1\n20" | ./scanner results.json
 
       # مرحله ۷ بدون تغییر
       - name: Commit and push results
