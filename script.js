@@ -2,9 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const statusEl = document.getElementById("status");
     const tableBody = document.querySelector("#results-table tbody");
 
-    /**
-     * ۱. این تابع پینگ هر IP را از مرورگر کاربر تست می‌کند
-     */
     function testLatency(ip, port) {
         return new Promise((resolve) => {
             const startTime = Date.now();
@@ -17,10 +14,9 @@ document.addEventListener("DOMContentLoaded", () => {
             };
 
             ws.onerror = () => {
-                resolve(null); // در صورت خطا، پینگ نامعتبر است
+                resolve(null);
             };
             
-            // اگر بعد از ۲ ثانیه پاسخی نیامد، اتصال را ناموفق در نظر بگیر
             setTimeout(() => {
                 resolve(null);
                 ws.close();
@@ -30,12 +26,18 @@ document.addEventListener("DOMContentLoaded", () => {
     
     async function main() {
         try {
-            // دریافت لیست اولیه از فایل جیسون
-            const response = await fetch("results.json");
-            const endpoints = await response.json();
-            statusEl.textContent = `Testing ${endpoints.length} endpoints...`;
+            // *** تغییر اصلی اینجاست ***
+            // استفاده از آدرس کامل و مستقیم برای جلوگیری از خطا
+            const response = await fetch("https://raw.githubusercontent.com/F0rc3Run/free-warp-endpoints/main/results.json");
+            
+            // بررسی اینکه آیا دانلود موفقیت‌آمیز بوده است
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
 
-            // تست پینگ تمام اندپوینت‌ها به صورت همزمان
+            const endpoints = await response.json();
+            statusEl.textContent = `در حال تست ${endpoints.length} اندپوینت...`;
+
             const testPromises = endpoints.map(ep => testLatency(ep.ip, ep.port));
             const latencies = await Promise.all(testPromises);
 
@@ -46,26 +48,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            /**
-             * ۲. این خط کد، نتایج را بر اساس پینگ مرتب می‌کند
-             */
             results.sort((a, b) => a.latency - b.latency);
 
-            statusEl.textContent = `Found ${results.length} responsive endpoints for you.`;
-            
-            /**
-             * ۳. اینجا نتایج مرتب‌شده در جدول نمایش داده می‌شود
-             */
+            statusEl.textContent = `تعداد ${results.length} اندپوینت پاسخگو برای شما یافت شد.`;
             displayResults(results);
 
         } catch (error) {
-            statusEl.textContent = "Error loading or testing endpoints.";
-            console.error(error);
+            statusEl.textContent = "خطا در بارگذاری یا تست اندپوینت‌ها.";
+            console.error("Fetch Error:", error);
         }
     }
 
     function displayResults(results) {
-        tableBody.innerHTML = ""; // پاک کردن جدول قبل از نمایش نتایج جدید
+        tableBody.innerHTML = "";
         results.forEach(result => {
             const row = document.createElement("tr");
             const endpoint = `${result.ip}:${result.port}`;
@@ -77,13 +72,12 @@ document.addEventListener("DOMContentLoaded", () => {
             row.innerHTML = `
                 <td>${endpoint}</td>
                 <td class="latency ${latencyClass}">${result.latency} ms</td>
-                <td><button class="copy-btn">Copy</button></td>
+                <td><button class="copy-btn">کپی</button></td>
             `;
 
-            // افزودن قابلیت کپی کردن با کلیک روی دکمه
             row.querySelector(".copy-btn").addEventListener("click", () => {
                 navigator.clipboard.writeText(endpoint).then(() => {
-                    alert(`Copied: ${endpoint}`);
+                    alert(`کپی شد: ${endpoint}`);
                 });
             });
 
