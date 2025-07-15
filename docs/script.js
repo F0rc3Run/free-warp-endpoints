@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
         outputContainer.style.display = 'block';
         if (results.length === 0) {
             outputTitle.textContent = 'نتیجه اسکن';
-            statusText.textContent = 'متاسفانه هیچ سرور فعالی برای اینترنت شما پیدا نشد.';
+            statusText.textContent = 'متاسفانه هیچ سرور فعالی برای شما پیدا نشد.';
             return;
         }
 
