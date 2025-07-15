@@ -1,0 +1,33 @@
+name: Scan and Update Endpoint List
+
+on:
+  workflow_dispatch: # اجازه اجرای دستی
+  schedule:
+    - cron: '0 */6 * * *' # هر ۶ ساعت یکبار
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      # ۱. کد ریپازیتوری شما را دانلود می‌کند
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ۲. ابزار اسکنر Cloudscanner را دانلود می‌کند
+      - name: Download Scanner
+        run: |
+          wget https://github.com/boypt/Cloudscanner/releases/latest/download/Cloudscanner-linux-amd64.zip
+          unzip Cloudscanner-linux-amd64.zip
+          chmod +x Cloudscanner
+
+      # ۳. اسکنر را برای پیدا کردن IP های فعال اجرا می‌کند
+      # این فرآیند ممکن است چند دقیقه طول بکشد
+      - name: Run Scanner to find live endpoints
+        run: ./Cloudscanner -p 10 -t 4 -o results.json
+
+      # ۴. فایل نتایج جدید را به ریپازیتوری شما کامیت می‌کند
+      - name: Commit and push if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Automated: Updated endpoint list via scanner"
+          file_pattern: results.json
