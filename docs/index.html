@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Endpoint Scanner - پیدا کردن بهترین سرور</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-grid"></div>
+    <div class="container">
+        <header class="main-header">
+            <img src="logo.png" alt="Logo" class="logo"> <h1>Endpoint Scanner</h1>
+            <p>بهترین سرورها را متناسب با اینترنت خود پیدا کنید</p>
+        </header>
+
+        <div class="scanner-card" id="start-scan-btn">
+            <div class="card-content">
+                <i class="fa-solid fa-network-wired icon"></i>
+                <span>شروع اسکن</span>
+            </div>
+        </div>
+
+        <div class="output-wrapper">
+            <div class="output-container" id="output-container">
+                <div class="output-header">
+                    <span id="output-title"></span>
+                </div>
+                <div class="output-body" id="scan-results">
+                    </div>
+            </div>
+            <p id="status-text"></p>
+        </div>
+    </div>
+
+    <footer class="support-footer">
+        <p>اگر این پروژه برای شما مفید بود، لطفاً با دادن ستاره از ما حمایت کنید.</p>
+        <a href="https://github.com/F0rc3Run" target="_blank" class="github-link">
+            <i class="fa-brands fa-github"></i>
+            F0rc3Run on GitHub
+        </a>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
