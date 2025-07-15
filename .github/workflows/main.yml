@@ -13,7 +13,7 @@ jobs:
       - name: Checkout Your Repository
         uses: actions/checkout@v4
 
-      # ۲. کد منبع اسکنر را دانلود می‌کند
+      # ۲. کد منبع اسکنر Go را دانلود می‌کند
       - name: Checkout BPB-Warp-Scanner
         uses: actions/checkout@v4
         with:
@@ -26,30 +26,24 @@ jobs:
         with:
           go-version: '1.21'
       
-      # ۴. وابستگی‌های پایتونی مورد نیاز را نصب می‌کند (برای برخی اسکریپت‌های کمکی)
-      - name: Install Python dependencies
-        run: |
-          python -m pip install -r scanner-source/requirements.txt
-
-      # ۵. ابزار را از کد منبع کامپایل می‌کند
+      # ۴. ابزار را از کد منبع کامپایل می‌کند
       - name: Build the Go application
         run: |
           cd scanner-source
           go build -o ../scanner .
 
-      # ۶. مرحله جدید: هسته Xray را دانلود و آماده می‌کند
+      # ۵. هسته Xray را دانلود و آماده می‌کند
       - name: Download and Set up Xray Core
         run: |
           wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
           mkdir core
           unzip Xray-linux-64.zip -d core
-          # اکنون فایل اجرایی xray در مسیر ./core/xray قرار دارد
 
-      # ۷. اسکنر را اجرا می‌کند
+      # ۶. اسکنر را اجرا می‌کند
       - name: Run Scanner
         run: ./scanner results.json
 
-      # ۸. فایل نتایج را کامیت می‌کند
+      # ۷. فایل نتایج را کامیت می‌کند
       - name: Commit and push results
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
