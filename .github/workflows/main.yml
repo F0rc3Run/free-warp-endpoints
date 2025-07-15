@@ -1,4 +1,4 @@
-name: Run BPB Warp Scanner
+name: Run BPB Warp Scanner and Convert Output
 
 on:
   workflow_dispatch:
@@ -9,40 +9,80 @@ jobs:
   scan-and-commit:
     runs-on: ubuntu-latest
     steps:
-      # مراحل ۱ تا ۵ بدون تغییر
+      # ۱. ریپازیتوری شما را آماده می‌کند
       - name: Checkout Your Repository
         uses: actions/checkout@v4
 
-      - name: Checkout BPB-Warp-Scanner Source Code
+      # ۲. کد منبع اسکنر را دانلود می‌کند
+      - name: Checkout BPB-Warp-Scanner
         uses: actions/checkout@v4
         with:
           repository: 'bia-pain-bache/BPB-Warp-Scanner'
           path: 'scanner-source'
 
+      # ۳. محیط زبان Go را آماده می‌کند
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: '1.21'
-
+      
+      # ۴. ابزار را کامپایل می‌کند
       - name: Build the Go application
         run: |
           cd scanner-source
           go build -o ../scanner .
 
+      # ۵. هسته Xray را دانلود می‌کند
       - name: Download and Set up Xray Core
         run: |
           wget https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
           mkdir core
           unzip Xray-linux-64.zip -d core
 
-      # --- تغییر اصلی در این مرحله است ---
-      - name: Run Scanner and Select All Options
-        # با دستور printf تمام ۵ گزینه منو را به ترتیب انتخاب می‌کنیم
-        run: printf "2\n3\n2\n1\n20" | ./scanner results.json
+      # ۶. اسکنر را اجرا می‌کند (این مرحله فایل result.csv را ایجاد می‌کند)
+      - name: Run Scanner
+        run: printf "2\n3\n2\n1\n20" | ./scanner ignored_output_name
 
-      # مرحله ۷ بدون تغییر
-      - name: Commit and push results
+      # ۷. مرحله جدید: فایل CSV را به JSON تبدیل می‌کند
+      - name: Convert CSV output to JSON
+        # یک اسکریپت پایتون کوتاه برای تبدیل فرمت اجرا می‌کنیم
+        run: |
+          python3 -c "
+          import csv
+          import json
+
+          # فرض می‌کنیم نام فایل خروجی اسکنر result.csv است
+          input_csv_file = 'result.csv'
+          output_json_file = 'results.json'
+
+          data = {'ipv4': [], 'ipv6': []}
+
+          try:
+              with open(input_csv_file, 'r') as csvfile:
+                  reader = csv.DictReader(csvfile)
+                  for row in reader:
+                      endpoint = row.get('Endpoint', '').strip()
+                      if not endpoint:
+                          continue
+                      
+                      # تشخیص اینکه آیا IP از نوع v6 است (شامل براکت است)
+                      if '[' in endpoint and ']' in endpoint:
+                          data['ipv6'].append(endpoint)
+                      else:
+                          data['ipv4'].append(endpoint)
+          except FileNotFoundError:
+              print(f'Error: {input_csv_file} not found. Scanner might have failed.')
+              exit(1)
+
+          with open(output_json_file, 'w') as jsonfile:
+              json.dump(data, jsonfile, indent=2)
+
+          print(f'Successfully converted {input_csv_file} to {output_json_file}')
+          "
+
+      # ۸. فایل نهایی results.json را کامیت می‌کند
+      - name: Commit and push results.json
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "Automated: Update warp endpoints via BPB Scanner"
+          commit_message: "Automated: Update and convert warp endpoints"
           file_pattern: results.json
