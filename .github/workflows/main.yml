@@ -13,17 +13,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # ۲. ابزار اسکنر Cloudscanner را دانلود می‌کند
+      # ۲. ابزار اسکنر را با لینک جدید و صحیح دانلود می‌کند
       - name: Download Scanner
         run: |
-          wget https://github.com/boypt/Cloudscanner/releases/latest/download/Cloudscanner-linux-amd64.zip
-          unzip Cloudscanner-linux-amd64.zip
-          chmod +x Cloudscanner
-
+          # تغییر اصلی اینجاست: استفاده از لینک دانلود صحیح
+          wget https://github.com/boypt/Cloudscanner/releases/latest/download/Cloudscanner_linux_amd64.zip
+          unzip Cloudscanner_linux_amd64.zip
+          chmod +x cloudscanner
+      
       # ۳. اسکنر را برای پیدا کردن IP های فعال اجرا می‌کند
-      # این فرآیند ممکن است چند دقیقه طول بکشد
       - name: Run Scanner to find live endpoints
-        run: ./Cloudscanner -p 10 -t 4 -o results.json
+        # نام فایل اجرایی پس از استخراج، حروف کوچک است
+        run: ./cloudscanner -p 10 -t 4 -o results.json
 
       # ۴. فایل نتایج جدید را به ریپازیتوری شما کامیت می‌کند
       - name: Commit and push if changed
