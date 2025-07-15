@@ -10,6 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # ... (تمام مراحل قبلی بدون تغییر باقی می‌مانند) ...
+      # مراحل ۱ تا ۵
+      - name: Checkout Your Repository
+        uses: actions/checkout@v4
+
+      - name: Checkout BPB-Warp-Scanner Source Code
+        uses: actions/checkout@v4
+        with:
+          repository: 'bia-pain-bache/BPB-Warp-Scanner'
+          path: 'scanner-source'
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
 
       - name: Build the Go application
         run: |
@@ -22,11 +36,12 @@ jobs:
           mkdir core
           unzip Xray-linux-64.zip -d core
 
-      # --- مرحله‌ای که تغییر کرده است ---
+      # --- تغییر اصلی اینجاست ---
       - name: Run Scanner and Select Option 2
-        # با دستور echo "3" | به صورت خودکار گزینه ۳ را برای اسکنر انتخاب می‌کنیم
+        # با دستور echo "2" به صورت خودکار گزینه ۲ برای اسکنر انتخاب می‌شود
         run: echo "2" | ./scanner results.json
 
+      # مرحله ۷: کامیت کردن نتایج
       - name: Commit and push results
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
