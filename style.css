@@ -1,6 +1,6 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 50%, #f0f0f0 100%); /* پس‌زمینه سفید با سایه */
+    background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 50%, #f0f0f0 100%);
     color: #333;
     margin: 0;
     padding: 40px;
@@ -8,21 +8,22 @@ body {
     flex-direction: column;
     align-items: center;
     min-height: 100vh;
-    overflow-x: hidden; /* جلوگیری از اسکرول افقی */
+    overflow-x: hidden;
 }
 
 header {
     text-align: center;
     margin-bottom: 30px;
-    background-color: rgba(255, 255, 255, 0.8); /* پس‌زمینه نیمه‌شفاف برای هدر */
+    background-color: rgba(255, 255, 255, 0.8);
     padding: 30px;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .logo-container {
-    width: 100px;
-    height: 100px;
+    /* Logo size increased */
+    width: 130px;
+    height: 130px;
     border-radius: 50%;
     overflow: hidden;
     margin: 0 auto 20px;
@@ -36,7 +37,7 @@ header {
 }
 
 h1 {
-    color: #2e7d32; /* سبز تیره */
+    color: #2e7d32;
     margin-bottom: 10px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.05);
 }
@@ -76,7 +77,7 @@ th, td {
 }
 
 th {
-    background-color: #d32f2f; /* قرمز */
+    background-color: #d32f2f;
     color: white;
     font-weight: bold;
 }
@@ -86,11 +87,11 @@ tbody tr:nth-child(even) {
 }
 
 tbody tr:hover {
-    background-color: #e0f2f7; /* آبی روشن برای هاور */
+    background-color: #e0f2f7;
 }
 
 .copy-btn {
-    background-color: #4caf50; /* سبز روشن */
+    background-color: #4caf50;
     color: white;
     border: none;
     padding: 10px 18px;
@@ -101,7 +102,7 @@ tbody tr:hover {
 }
 
 .copy-btn:hover {
-    background-color: #388e3c; /* سبز تیره‌تر برای هاور */
+    background-color: #388e3c;
 }
 
 .latency {
@@ -109,13 +110,13 @@ tbody tr:hover {
 }
 
 .latency.fast {
-    color: #2e7d32; /* سبز */
+    color: #2e7d32;
 }
 
 .latency.medium {
-    color: #f9a825; /* زرد/نارنجی */
+    color: #f9a825;
 }
 
 .latency.slow {
-    color: #d32f2f; /* قرمز */
+    color: #d32f2f;
 }
