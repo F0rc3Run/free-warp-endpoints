@@ -39,7 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
         statusText.textContent = 'در حال دریافت لیست سرورها...';
 
         try {
-            const response = await fetch(endpointListUrl);
+            // *** تغییر اصلی اینجاست: افزودن پارامتر زمان برای دور زدن کش ***
+            const response = await fetch(`${endpointListUrl}?v=${new Date().getTime()}`);
+            
             if (!response.ok) throw new Error('Network error while fetching list');
             const data = await response.json();
 
