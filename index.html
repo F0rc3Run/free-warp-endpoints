@@ -4,33 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WARP Endpoint Scanner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <div class="logo-container">
-            <img src="logo.png" alt="Logo" class="logo">
-        </div>
-        <h1>WARP Endpoint Scanner</h1>
-        <p class="force-run-explanation">
-            Brief explanation of ForceRun: This feature helps you bypass internet restrictions and enjoy a freer online experience using WARP tunnels.
-        </p>
-        <p id="status">Loading endpoints...</p>
-        <p class="suggestion-text">Suggested Endpoints (Sorted by Ping Speed):</p>
-    </header>
-    <main>
-        <table id="results-table">
-            <thead>
-                <tr>
-                    <th>Endpoint (IP:Port)</th>
-                    <th>Ping (ms)</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                </tbody>
-        </table>
-    </main>
+    <div class="background-blobs">
+        <div class="blob-1"></div>
+        <div class="blob-2"></div>
+        <div class="blob-3"></div>
+    </div>
+
+    <div class="glass-container">
+        <header>
+            <div class="logo-container">
+                <img src="logo.png" alt="Logo" class="logo">
+            </div>
+            <h1>WARP Endpoint Scanner</h1>
+            <p class="force-run-explanation">
+                Using WARP tunnels to bypass internet restrictions and enjoy a freer online experience.
+            </p>
+        </header>
+        <main>
+            <p id="status">Loading & Testing Endpoints...</p>
+            <div class="table-wrapper">
+                <table id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Endpoint (IP:Port)</th>
+                            <th>Ping (ms)</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
