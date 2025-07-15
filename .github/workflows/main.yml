@@ -9,7 +9,7 @@ jobs:
   scan-and-commit:
     runs-on: ubuntu-latest
     steps:
-      # مراحل ۱ تا ۵ بدون تغییر باقی می‌مانند
+      # مراحل ۱ تا ۵ بدون تغییر
       - name: Checkout Your Repository
         uses: actions/checkout@v4
 
@@ -35,12 +35,13 @@ jobs:
           mkdir core
           unzip Xray-linux-64.zip -d core
 
-      # --- تغییر اصلی اینجاست ---
-      - name: Run Scanner and Select Options
-        # با دستور printf به ترتیب گزینه ۲، سپس ۳، و در آخر ۲ را انتخاب می‌کنیم
-        run: printf "2\n3\n2" | ./scanner results.json
+      # --- تغییر اصلی در این مرحله است ---
+      - name: Run Scanner and Select All Options
+        # با دستور printf هر چهار گزینه را به ترتیب انتخاب می‌کنیم
+        # 2=Normal Scan, 3=IPv4 & IPv6, 2=Warp is OK, 1=Default Noise
+        run: printf "2\n3\n2\n1" | ./scanner results.json
 
-      # مرحله ۷ بدون تغییر باقی می‌ماند
+      # مرحله ۷ بدون تغییر
       - name: Commit and push results
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
