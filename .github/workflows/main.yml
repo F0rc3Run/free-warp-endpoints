@@ -41,7 +41,7 @@ jobs:
 
       # ۶. اسکنر را اجرا می‌کند (این مرحله فایل result.csv را ایجاد می‌کند)
       - name: Run Scanner
-        run: printf "2\n3\n2\n1\n20" | ./scanner ignored_output_name
+        run: printf "2\n1\n1\n1\n20" | ./scanner ignored_output_name
 
       # ۷. مرحله جدید: فایل CSV را به JSON تبدیل می‌کند
       - name: Convert CSV output to JSON
