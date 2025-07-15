@@ -1,4 +1,4 @@
-name: Run BPB Warp Scanner
+name: Run BPB Warp Scanner (Go Version)
 
 on:
   workflow_dispatch: # اجازه اجرای دستی
@@ -13,27 +13,33 @@ jobs:
       - name: Checkout Your Repository
         uses: actions/checkout@v4
 
-      # ۲. ابزار اسکنر BPB را از گیت‌هاب دانلود می‌کند
+      # ۲. کد منبع اسکنر Go را از گیت‌هاب دانلود می‌کند
       - name: Checkout BPB-Warp-Scanner
         uses: actions/checkout@v4
         with:
           repository: 'bia-pain-bache/BPB-Warp-Scanner'
-          path: 'scanner'
+          path: 'scanner-source'
 
-      # ۳. محیط پایتون را آماده می‌کند
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      # ۳. محیط زبان Go را آماده می‌کند
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
-          python-version: '3.10'
+          go-version: '1.21' # یک نسخه پایدار از Go
 
-      # ۴. اسکریپت اسکنر را با نام صحیح اجرا می‌کند
-      - name: Run Scanner
+      # ۴. ابزار را از کد منبع کامپایل می‌کند
+      - name: Build the Go application
+        # وارد پوشه سورس شده و برنامه را کامپایل می‌کنیم
+        # خروجی کامپایل شده در مسیر اصلی با نام 'scanner' ذخیره می‌شود
         run: |
-          cd scanner
-          # تغییر اصلی اینجاست: استفاده از نام فایل صحیح main.py
-          python3 main.py -f ../results.json
+          cd scanner-source
+          go build -o ../scanner .
 
-      # ۵. فایل نتایج جدید را کامیت می‌کند
+      # ۵. اسکنر کامپایل شده را اجرا می‌کند
+      - name: Run Scanner
+        # فایل اجرایی که در مرحله قبل ساختیم را اجرا می‌کنیم
+        run: ./scanner -f results.json
+
+      # ۶. فایل نتایج جدید را در ریپازیتوری شما کامیت می‌کند
       - name: Commit and push results
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
