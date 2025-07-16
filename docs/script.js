@@ -1,8 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     // آدرس فایل results.json شما
     const resultsUrl = 'results.json';
-    // !!! URL ی که از Google Apps Script کپی می‌کنید را اینجا قرار دهید !!!
-    const logApiUrl = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
 
     const getBtn = document.getElementById('get-endpoints-btn');
     const resultsContainer = document.getElementById('results-container');
@@ -10,20 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let isLoading = false;
     let allEndpoints = [];
-
-    // فانکشن برای ارسال لاگ به گوگل شیت
-    async function logInteraction() {
-        if (!logApiUrl || logApiUrl === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
-            console.warn("Log API URL not set. Skipping log.");
-            return;
-        }
-        try {
-            // یک درخواست ساده ارسال می‌کنیم. گوگل شیت خودش زمان و آی‌پی را ثبت می‌کند.
-            await fetch(logApiUrl, { method: 'POST' });
-        } catch (error) {
-            console.error('Failed to log interaction:', error);
-        }
-    }
 
     // فانکشن برای دریافت اولیه لیست اندپوینت‌ها
     async function fetchAllEndpoints() {
@@ -52,9 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
-        // مرحله اول: ارسال لاگ
-        logInteraction();
-
         isLoading = true;
         const icon = getBtn.querySelector('.icon');
         icon.classList.add('processing');
