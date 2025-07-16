@@ -1,76 +1,108 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // آدرس فایل نتایج شما
+    // آدرس فایل محلی در ریپازیتوری شما
     const resultsUrl = 'results.json';
 
-    // شناسه‌های صحیح برای دسترسی به عناصر صفحه
+    // دسترسی به عناصر صفحه با شناسه‌های صحیح از HTML شما
     const startBtn = document.getElementById('scan-btn');
     const resultsContainer = document.getElementById('results-container');
     const statusText = document.getElementById('status-text');
 
-    let isLoading = false;
-    let allEndpoints = [];
+    let isScanning = false;
+    let allEndpoints = []; // برای ذخیره لیست کاندیداها
 
-    // فانکشن برای دریافت و ذخیره اولیه لیست اندپوینت‌ها
-    async function fetchAllEndpoints() {
-        statusText.textContent = 'در حال دریافت لیست سرورهای تست‌شده...';
-        try {
-            const response = await fetch(`${resultsUrl}?v=${new Date().getTime()}`);
-            if (!response.ok) throw new Error('فایل نتایج یافت نشد.');
-            allEndpoints = await response.json();
-            statusText.textContent = 'لیست سرورها آماده است. برای دریافت اندپوینت کلیک کنید.';
-        } catch (error) {
-            statusText.textContent = `خطا: ${error.message}`;
-        }
+    // فانکشن تست پینگ زنده از مرورگر کاربر
+    function testLatency(ip, port) {
+        return new Promise((resolve) => {
+            const startTime = Date.now();
+            const ws = new WebSocket(`wss://${ip}:${port}`);
+            ws.onopen = () => {
+                ws.close();
+                // در صورت موفقیت، آبجکتی شامل اندپوینت و پینگ را برمی‌گرداند
+                resolve({ endpoint: `${ip}:${port}`, latency: Date.now() - startTime });
+            };
+            ws.onerror = () => resolve(null); // در صورت خطا، null برمی‌گرداند
+            setTimeout(() => {
+                if (ws.readyState === WebSocket.CONNECTING) ws.close();
+                resolve(null);
+            }, 3000); // تایم‌اوت ۳ ثانیه‌ای
+        });
     }
 
-    // فانکشن اصلی برای انتخاب و نمایش نتایج
-    function showRandomEndpoints() {
-        if (isLoading || allEndpoints.length === 0) {
-            if (allEndpoints.length === 0) fetchAllEndpoints();
-            return;
-        }
-        
-        isLoading = true;
+    // فانکشن اصلی برای شروع اسکن
+    async function startScan() {
+        if (isScanning) return;
+        isScanning = true;
+
         const icon = startBtn.querySelector('.icon');
         icon.classList.add('processing');
-        resultsContainer.innerHTML = ''; 
-        statusText.textContent = 'در حال انتخاب سرورهای تصادفی...';
+        resultsContainer.innerHTML = '';
+        statusText.textContent = 'در حال دریافت لیست سرورها...';
 
-        setTimeout(() => {
-            const latencyThreshold = 300;
-            let goodEndpoints = allEndpoints.filter(ep => ep.latency < latencyThreshold);
-            if (goodEndpoints.length < 5) {
-                goodEndpoints = [...allEndpoints];
-            }
-            const randomEndpoints = [...goodEndpoints].sort(() => 0.5 - Math.random()).slice(0, 5);
-
-            displayResults(randomEndpoints);
+        try {
+            const response = await fetch(`${resultsUrl}?v=${new Date().getTime()}`);
+            if (!response.ok) throw new Error('فایل results.json یافت نشد.');
             
+            const data = await response.json();
+            // لیست‌های ipv4 و ipv6 را از جیسون خوانده و با هم ادغام می‌کنیم
+            const all_raw_endpoints = [...(data.ipv4 || []), ...(data.ipv6 || [])];
+
+            if (all_raw_endpoints.length === 0) throw new Error('لیست کاندیداها خالی است.');
+
+            statusText.textContent = `شروع اسکن زنده روی ${all_raw_endpoints.length} سرور...`;
+
+            // اجرای همزمان تمام تست‌ها
+            const promises = all_raw_endpoints.map(ep => {
+                const lastColonIndex = ep.lastIndexOf(':');
+                const ip = ep.substring(0, lastColonIndex);
+                const port = ep.substring(lastColonIndex + 1);
+                return testLatency(ip, port);
+            });
+
+            const allResults = await Promise.all(promises);
+
+            // فیلتر کردن نتایج موفق (آنهایی که null نیستند)
+            const successfulResults = allResults.filter(r => r !== null);
+            
+            // مرتب‌سازی بر اساس پینگ واقعی کاربر
+            successfulResults.sort((a, b) => a.latency - b.latency);
+
+            displayRandomTopEndpoints(successfulResults);
+
+        } catch (error) {
+            statusText.textContent = `خطا: ${error.message}`;
+        } finally {
+            isScanning = false;
             icon.classList.remove('processing');
-            isLoading = false;
-        }, 1000); 
+        }
     }
 
-    // فانکشن برای نمایش جذاب نتایج
-    function displayResults(results) {
+    // فانکشن برای نمایش ۵ نتیجه تصادفی از بین بهترین‌ها
+    function displayRandomTopEndpoints(results) {
+        resultsContainer.innerHTML = '';
+
         if (results.length === 0) {
-            statusText.textContent = 'هیچ سروری برای نمایش یافت نشد.';
+            statusText.textContent = 'متاسفانه هیچ سرور فعالی برای اینترنت شما پیدا نشد.';
             return;
         }
-        statusText.textContent = '۵ اندپوینت پرسرعت (انتخاب تصادفی):';
+
+        // بهترین‌ها را جدا می‌کنیم (مثلاً ۲۰ سرور برتر)
+        const topTierEndpoints = results.slice(0, 20);
+        // از بین بهترین‌ها، ۵ مورد را به صورت تصادفی انتخاب می‌کنیم
+        const randomTop5 = topTierEndpoints.sort(() => 0.5 - Math.random()).slice(0, 5);
         
-        results.forEach((result, index) => {
+        statusText.textContent = '۵ اندپوینت پرسرعت برای شما (بر اساس تست زنده):';
+        
+        randomTop5.forEach((result, index) => {
             const item = document.createElement('div');
-            item.className = 'result-item';
+            item.className = 'result-item'; // این کلاس در style.css شما وجود دارد
             item.style.animationDelay = `${index * 100}ms`;
             
             item.innerHTML = `
-                <div class="icon-wrapper"><i class="fa-solid fa-server"></i></div>
-                <div class="details">
-                    <span class="endpoint">${result.endpoint}</span>
-                    <span class="latency">Ping (via Server): ${result.latency} ms</span>
+                <span class="endpoint">${result.endpoint}</span>
+                <div class="result-details">
+                    <span class="latency">${result.latency} ms</span>
+                    <button class="copy-btn" title="کپی کردن اندپوینت"><i class="fa-solid fa-copy"></i></button>
                 </div>
-                <button class="copy-btn" title="کپی کردن اندپوینت"><i class="fa-solid fa-copy"></i></button>
             `;
             resultsContainer.appendChild(item);
         });
@@ -95,6 +127,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    startBtn.addEventListener('click', showRandomEndpoints);
-    fetchAllEndpoints();
+    startBtn.addEventListener('click', startScan);
 });
