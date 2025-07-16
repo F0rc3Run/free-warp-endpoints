@@ -1,7 +1,6 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // *** تغییر اصلی: آدرس فایل به صورت محلی و مستقیم تنظیم شده است ***
-    const endpointListUrl = 'results.json';
+// script.js
 
+document.addEventListener('DOMContentLoaded', () => {
     const startBtn = document.getElementById('start-scan-btn');
     const outputContainer = document.getElementById('output-container');
     const outputTitle = document.getElementById('output-title');
@@ -10,14 +9,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let isScanning = false;
 
-    // فانکشن تست پینگ
+    // فانکشن تست پینگ از طریق WebSocket
     function testLatency(ip, port) {
         return new Promise((resolve) => {
             const startTime = Date.now();
             const ws = new WebSocket(`wss://${ip}:${port}`);
             ws.onopen = () => {
                 ws.close();
-                resolve(Date.now() - startTime);
+                resolve({ ip, port, latency: Date.now() - startTime });
             };
             ws.onerror = () => resolve(null);
             setTimeout(() => {
@@ -27,7 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // فانکشن اصلی اسکن
     async function startScan() {
         if (isScanning) return;
         isScanning = true;
@@ -36,47 +34,37 @@ document.addEventListener('DOMContentLoaded', () => {
         icon.classList.add('processing');
         outputContainer.style.display = 'none';
         scanResultsDiv.innerHTML = '';
-        statusText.textContent = 'در حال خواندن لیست سرورها...';
+        statusText.textContent = 'در حال دریافت لیست کاندیداها...';
 
         try {
-            // از Cache Busting استفاده می‌کنیم تا همیشه آخرین نسخه فایل خوانده شود
-            const response = await fetch(`${endpointListUrl}?v=${new Date().getTime()}`);
-            
-            if (!response.ok) throw new Error('فایل results.json پیدا نشد. مطمئن شوید که در کنار فایل‌های دیگر وجود دارد.');
+            const response = await fetch(`results.json?v=${new Date().getTime()}`);
+            if (!response.ok) throw new Error('لیست کاندیداها یافت نشد.');
             
             const data = await response.json();
-
-            const raw_ipv4_list = data.ipv4 || [];
-            const raw_ipv6_list = data.ipv6 || [];
-            const all_raw_endpoints = [...raw_ipv4_list, ...raw_ipv6_list];
+            const all_raw_endpoints = [...(data.ipv4 || []), ...(data.ipv6 || [])];
             
             const endpoints = all_raw_endpoints.map(entry => {
                 const cleanEntry = entry.replace(/[^\x20-\x7E]/g, '');
                 const lastColonIndex = cleanEntry.lastIndexOf(':');
                 if (lastColonIndex === -1) return null;
-                const ip = cleanEntry.substring(0, lastColonIndex);
-                const port = cleanEntry.substring(lastColonIndex + 1);
-                return { ip, port };
+                return { ip: cleanEntry.substring(0, lastColonIndex), port: cleanEntry.substring(lastColonIndex + 1) };
             }).filter(Boolean);
 
-            if (endpoints.length === 0) throw new Error('لیست سرورها خالی یا نامعتبر است.');
+            if (endpoints.length === 0) throw new Error('لیست کاندیداها خالی است.');
 
-            statusText.textContent = `تعداد ${endpoints.length} سرور یافت شد. شروع تست پینگ...`;
+            statusText.textContent = `شروع اسکن زنده روی ${endpoints.length} سرور...`;
 
-            const testPromises = endpoints.map(ep => testLatency(ep.ip, ep.port));
-            const latencies = await Promise.all(testPromises);
+            // اجرای همزمان تمام تست‌ها
+            const promises = endpoints.map(ep => testLatency(ep.ip, ep.port));
+            const allResults = await Promise.all(promises);
 
-            const results = [];
-            for (let i = 0; i < endpoints.length; i++) {
-                if (latencies[i] !== null) {
-                    results.push({ ...endpoints[i], latency: latencies[i] });
-                }
-            }
+            // فیلتر کردن نتایج موفق
+            const successfulResults = allResults.filter(r => r !== null);
+            
+            // مرتب‌سازی بر اساس پینگ واقعی کاربر
+            successfulResults.sort((a, b) => a.latency - b.latency);
 
-            results.sort((a, b) => a.latency - b.latency);
-            const top3Results = results.slice(0, 3);
-
-            displayResults(top3Results);
+            displayResults(successfulResults);
 
         } catch (error) {
             statusText.textContent = `خطا: ${error.message}`;
@@ -86,19 +74,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // فانکشن نمایش نتایج
     function displayResults(results) {
         outputContainer.style.display = 'block';
+        scanResultsDiv.innerHTML = ''; // پاک کردن نتایج قبلی
+
         if (results.length === 0) {
             outputTitle.textContent = 'نتیجه اسکن';
-            statusText.textContent = 'متاسفانه هیچ سرور فعالی برای شما پیدا نشد.';
+            statusText.textContent = 'متاسفانه هیچ سرور فعالی برای اینترنت شما پیدا نشد.';
             return;
         }
 
-        outputTitle.textContent = '۳ سرور برتر برای شما';
-        statusText.textContent = 'اسکن کامل شد.';
+        const topResults = results.slice(0, 3); // نمایش ۳ نتیجه برتر
+        outputTitle.textContent = `یافت شد! ${results.length} سرور فعال (نمایش ۳ مورد برتر)`;
+        statusText.textContent = 'این نتایج بر اساس سرعت اینترنت شما مرتب شده‌اند.';
         
-        results.forEach(result => {
+        topResults.forEach(result => {
             const item = document.createElement('div');
             item.className = 'result-item';
             item.innerHTML = `
