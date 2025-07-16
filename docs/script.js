@@ -1,108 +1,95 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // آدرس فایل محلی در ریپازیتوری شما
+    // آدرس فایل results.json شما
     const resultsUrl = 'results.json';
+    // !!! URL ی که از Google Apps Script کپی می‌کنید را اینجا قرار دهید !!!
+    const logApiUrl = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
 
-    // دسترسی به عناصر صفحه با شناسه‌های صحیح از HTML شما
-    const startBtn = document.getElementById('scan-btn');
+    const getBtn = document.getElementById('get-endpoints-btn');
     const resultsContainer = document.getElementById('results-container');
     const statusText = document.getElementById('status-text');
 
-    let isScanning = false;
-    let allEndpoints = []; // برای ذخیره لیست کاندیداها
+    let isLoading = false;
+    let allEndpoints = [];
 
-    // فانکشن تست پینگ زنده از مرورگر کاربر
-    function testLatency(ip, port) {
-        return new Promise((resolve) => {
-            const startTime = Date.now();
-            const ws = new WebSocket(`wss://${ip}:${port}`);
-            ws.onopen = () => {
-                ws.close();
-                // در صورت موفقیت، آبجکتی شامل اندپوینت و پینگ را برمی‌گرداند
-                resolve({ endpoint: `${ip}:${port}`, latency: Date.now() - startTime });
-            };
-            ws.onerror = () => resolve(null); // در صورت خطا، null برمی‌گرداند
-            setTimeout(() => {
-                if (ws.readyState === WebSocket.CONNECTING) ws.close();
-                resolve(null);
-            }, 3000); // تایم‌اوت ۳ ثانیه‌ای
-        });
-    }
-
-    // فانکشن اصلی برای شروع اسکن
-    async function startScan() {
-        if (isScanning) return;
-        isScanning = true;
-
-        const icon = startBtn.querySelector('.icon');
-        icon.classList.add('processing');
-        resultsContainer.innerHTML = '';
-        statusText.textContent = 'در حال دریافت لیست سرورها...';
-
-        try {
-            const response = await fetch(`${resultsUrl}?v=${new Date().getTime()}`);
-            if (!response.ok) throw new Error('فایل results.json یافت نشد.');
-            
-            const data = await response.json();
-            // لیست‌های ipv4 و ipv6 را از جیسون خوانده و با هم ادغام می‌کنیم
-            const all_raw_endpoints = [...(data.ipv4 || []), ...(data.ipv6 || [])];
-
-            if (all_raw_endpoints.length === 0) throw new Error('لیست کاندیداها خالی است.');
-
-            statusText.textContent = `شروع اسکن زنده روی ${all_raw_endpoints.length} سرور...`;
-
-            // اجرای همزمان تمام تست‌ها
-            const promises = all_raw_endpoints.map(ep => {
-                const lastColonIndex = ep.lastIndexOf(':');
-                const ip = ep.substring(0, lastColonIndex);
-                const port = ep.substring(lastColonIndex + 1);
-                return testLatency(ip, port);
-            });
-
-            const allResults = await Promise.all(promises);
-
-            // فیلتر کردن نتایج موفق (آنهایی که null نیستند)
-            const successfulResults = allResults.filter(r => r !== null);
-            
-            // مرتب‌سازی بر اساس پینگ واقعی کاربر
-            successfulResults.sort((a, b) => a.latency - b.latency);
-
-            displayRandomTopEndpoints(successfulResults);
-
-        } catch (error) {
-            statusText.textContent = `خطا: ${error.message}`;
-        } finally {
-            isScanning = false;
-            icon.classList.remove('processing');
-        }
-    }
-
-    // فانکشن برای نمایش ۵ نتیجه تصادفی از بین بهترین‌ها
-    function displayRandomTopEndpoints(results) {
-        resultsContainer.innerHTML = '';
-
-        if (results.length === 0) {
-            statusText.textContent = 'متاسفانه هیچ سرور فعالی برای اینترنت شما پیدا نشد.';
+    // فانکشن برای ارسال لاگ به گوگل شیت
+    async function logInteraction() {
+        if (!logApiUrl || logApiUrl === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
+            console.warn("Log API URL not set. Skipping log.");
             return;
         }
+        try {
+            // یک درخواست ساده ارسال می‌کنیم. گوگل شیت خودش زمان و آی‌پی را ثبت می‌کند.
+            await fetch(logApiUrl, { method: 'POST' });
+        } catch (error) {
+            console.error('Failed to log interaction:', error);
+        }
+    }
 
-        // بهترین‌ها را جدا می‌کنیم (مثلاً ۲۰ سرور برتر)
-        const topTierEndpoints = results.slice(0, 20);
-        // از بین بهترین‌ها، ۵ مورد را به صورت تصادفی انتخاب می‌کنیم
-        const randomTop5 = topTierEndpoints.sort(() => 0.5 - Math.random()).slice(0, 5);
+    // فانکشن برای دریافت اولیه لیست اندپوینت‌ها
+    async function fetchAllEndpoints() {
+        statusText.textContent = 'در حال دریافت لیست سرورها...';
+        try {
+            const response = await fetch(`${resultsUrl}?v=${new Date().getTime()}`);
+            if (!response.ok) throw new Error('فایل نتایج یافت نشد.');
+            
+            const data = await response.json();
+            allEndpoints = [...(data.ipv4 || []), ...(data.ipv6 || [])];
+            
+            if (allEndpoints.length > 0) {
+                statusText.textContent = 'لیست سرورها آماده است. برای دریافت اندپوینت کلیک کنید.';
+            } else {
+                statusText.textContent = 'لیست سرورها خالی است.';
+            }
+        } catch (error) {
+            statusText.textContent = `خطا: ${error.message}`;
+        }
+    }
+
+    // فانکشن اصلی برای انتخاب و نمایش نتایج
+    function showRandomEndpoints() {
+        if (isLoading || allEndpoints.length === 0) {
+            if (allEndpoints.length === 0) fetchAllEndpoints();
+            return;
+        }
         
-        statusText.textContent = '۵ اندپوینت پرسرعت برای شما (بر اساس تست زنده):';
+        // مرحله اول: ارسال لاگ
+        logInteraction();
+
+        isLoading = true;
+        const icon = getBtn.querySelector('.icon');
+        icon.classList.add('processing');
+        resultsContainer.innerHTML = ''; 
+        statusText.textContent = 'در حال انتخاب بهترین سرورها...';
+
+        setTimeout(() => {
+            // از کل لیست، ۵ مورد را به صورت تصادفی انتخاب می‌کنیم
+            const randomEndpoints = [...allEndpoints].sort(() => 0.5 - Math.random()).slice(0, 5);
+            displayResults(randomEndpoints);
+            
+            icon.classList.remove('processing');
+            isLoading = false;
+        }, 1000); 
+    }
+
+    // فانکشن برای نمایش نتایج
+    function displayResults(results) {
+        if (results.length === 0) {
+            statusText.textContent = 'هیچ سروری برای نمایش یافت نشد.';
+            return;
+        }
+        statusText.textContent = 'اندپوینت‌های پیشنهادی برای شما:';
         
-        randomTop5.forEach((result, index) => {
+        results.forEach((endpoint, index) => {
             const item = document.createElement('div');
-            item.className = 'result-item'; // این کلاس در style.css شما وجود دارد
+            item.className = 'result-item';
             item.style.animationDelay = `${index * 100}ms`;
             
             item.innerHTML = `
-                <span class="endpoint">${result.endpoint}</span>
-                <div class="result-details">
-                    <span class="latency">${result.latency} ms</span>
-                    <button class="copy-btn" title="کپی کردن اندپوینت"><i class="fa-solid fa-copy"></i></button>
+                <div class="icon-wrapper"><i class="fa-solid fa-server"></i></div>
+                <div class="details">
+                    <span class="endpoint">${endpoint}</span>
                 </div>
+                <button class="copy-btn" title="کپی کردن اندپوینت"><i class="fa-solid fa-copy"></i></button>
             `;
             resultsContainer.appendChild(item);
         });
@@ -112,20 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
     resultsContainer.addEventListener('click', (event) => {
         const copyBtn = event.target.closest('.copy-btn');
         if (!copyBtn) return;
-
-        const resultItem = copyBtn.closest('.result-item');
-        const endpointText = resultItem.querySelector('.endpoint').textContent;
-        
+        const endpointText = copyBtn.closest('.result-item').querySelector('.endpoint').textContent;
         navigator.clipboard.writeText(endpointText).then(() => {
             const icon = copyBtn.querySelector('i');
-            icon.classList.remove('fa-copy');
-            icon.classList.add('fa-check');
+            icon.classList.remove('fa-copy'); icon.classList.add('fa-check');
             setTimeout(() => {
-                icon.classList.remove('fa-check');
-                icon.classList.add('fa-copy');
+                icon.classList.remove('fa-check'); icon.classList.add('fa-copy');
             }, 2000);
         });
     });
 
-    startBtn.addEventListener('click', startScan);
+    getBtn.addEventListener('click', showRandomEndpoints);
+    fetchAllEndpoints(); // در ابتدای بارگذاری صفحه، لیست را دریافت کن
 });
