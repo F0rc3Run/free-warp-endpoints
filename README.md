@@ -9,7 +9,7 @@
   <br/><br/>
   <a href="https://f0rc3run.github.io/free-warp-endpoints/"><strong>🚀 Live Demo Panel</strong></a> •
   <a href="https://t.me/ForceRunVPN"><strong>📢 Telegram Channel</strong></a> •
-  <a href="https://github.com/F0rc3Run/ultimate-warp-generator/issues">Report a Bug</a>
+  <a href="https://github.com/F0rc3Run/free-warp-endpoints/issues">Report a Bug</a>
 </p>
 
 ---
