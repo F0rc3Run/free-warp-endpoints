@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="logo.png" alt="F0rc3Run - Free Internet & WARP WireGuard Generator" width="160"/>
+  <img src="https://raw.githubusercontent.com/F0rc3Run/free-warp-endpoints/refs/heads/main/docs/logo.png" alt="F0rc3Run - Free Internet & WARP WireGuard Generator" width="160"/>
 </p>
 <h1 align="center">Ultimate Cloudflare WARP & WireGuard Config Generator</h1>
 <p align="center">
