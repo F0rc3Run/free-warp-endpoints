@@ -49,7 +49,7 @@ This generator is packed with features to give you full control over your free V
 
 Getting your own private WARP config is incredibly simple:
 
-1.  **Go to the Panel:** Open the [**Live Demo Panel**](https://f0rc3run.github.io/ultimate-warp-generator/).
+1.  **Go to the Panel:** Open the [**Live Demo Panel**](https://f0rc3run.github.io/free-warp-endpoints/).
 2.  **Generate Config:** Click the **"Generate First Config"** button to create your new WARP account.
 3.  **Save & Name:** Give your configuration a memorable name and save it.
 4.  **Choose Your Format:** Select the tab for the format you need (Standard WG, AmneziaWG, or Sing-Box).
