@@ -1,0 +1,45 @@
+# This workflow automates the process of creating a GitHub Release
+# It packages the Python script and the pre-built Windows ZIP for distribution.
+
+name: Create Cross-Platform Release
+
+# This workflow runs ONLY when you push a new tag starting with 'v' (e.g., v1.0, v1.1.0)
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  # This job packages everything and creates the release
+  create-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository's code
+      # This allows the workflow to access your files (FREAS.py, FREAS_windows.zip, etc.)
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Create the GitHub Release
+      # This action creates a new release page based on the tag you pushed
+      - name: Create Release and Upload Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          # The release will be named after the tag (e.g., "v1.0.0")
+          tag_name: ${{ github.ref_name }}
+          
+          # The name of the release will be "F0rc3Run Endpoint Amnezia Scanner vX.X.X"
+          name: F0rc3Run Endpoint Amnezia Scanner ${{ github.ref_name }}
+          
+          # Automatically generate release notes from your recent commit messages
+          generate_release_notes: true
+          
+          # IMPORTANT: List of files to attach to the release
+          # This will upload your pre-built ZIP and the Python script
+          files: |
+            FREAS_windows.zip
+            FREAS.py
+            requirements.txt
+        env:
+          # This token is automatically provided by GitHub
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
