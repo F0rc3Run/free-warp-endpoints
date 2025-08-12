@@ -1,0 +1,29 @@
+ForceRun Free Access License (FFAL) v1.0
+
+Copyright (c) 2025 AMF
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this project and associated documentation files (the “Project”), to deal in
+the Project without restriction, including the rights to use, copy, modify,
+merge, publish, distribute, and/or sublicense the Project, subject to the following conditions:
+
+You ARE allowed to:
+  - Freely use this project for personal or non-commercial purposes.
+  - Modify, improve, or build upon this project.
+  - Share this tool publicly with proper credit.
+  - Integrate this into open-source efforts promoting free internet.
+
+You are NOT allowed to:
+  - Sell or monetise this project or its results without explicit permission.
+  - Use this tool to break laws in places where VPN usage is restricted or illegal.
+  - Claim authorship or remove references to F0rc3Run.
+
+Notes:
+  - All servers are public and temporary; the author hosts none of them.
+  - This project is provided "as-is", without warranty of any kind.
+  - The primary goal is to support free internet access, especially in censored regions.
+
+By using this project, you support the mission for global, unrestricted internet access.
+Share it, improve it, and keep it free.
+
+END OF LICENSE
