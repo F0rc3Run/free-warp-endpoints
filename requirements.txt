@@ -1,0 +1,3 @@
+requests
+cryptography
+ping3
