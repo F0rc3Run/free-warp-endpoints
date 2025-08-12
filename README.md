@@ -1,10 +1,212 @@
-<p align="center"><img src="https://raw.githubusercontent.com/F0rc3Run/free-warp-endpoints/refs/heads/main/docs/logo.png" alt="F0rc3Run - Free Internet & WARP WireGuard Generator" width="160"/></p><h1 align="center">F0rc3Run Endpoint Amnezia Scanner</h1><p align="center">An intelligent, cross-platform Python script to discover the fastest Cloudflare WARP endpoints and generate ready-to-use AmneziaWG profiles to bypass censorship.<br/><br/><b>✊️ Fighting for Free Internet Access</b><br/><br/><a href="https://t.me/ForceRunVPN"><strong>📢 Telegram Channel</strong></a> •<a href="https://www.google.com/search?q=https://github.com/F0rc3Run/F0rc3Run/issues">Report a Bug</a> •<a href="https://github.com/F0rc3Run/F0rc3Run">Star the Project</a></p><details><summary><strong>راهنمای نصب و راه‌اندازی (برای کاربران فارسی‌زبان)</strong></summary>🚀 شروع سریعاین اسکریپت یک ابزار قدرتمند خط فرمان برای پیدا کردن بهترین اندپوینت‌های WARP و ساخت کانفیگ‌های Amnezia است. برای اجرای آن، مراحل زیر را دنبال کنید.مرحله ۱: نصب پایتون و پیش‌نیازهاابتدا مطمئن شوید پایتون ۳.۷ یا بالاتر روی سیستم شما نصب است. سپس، یک فایل با نام requirements.txt بسازید و محتوای زیر را در آن کپی کنید:requests
+<p align="center">
+  <img src="https://raw.githubusercontent.com/F0rc3Run/free-warp-endpoints/refs/heads/main/docs/logo.png" alt="F0rc3Run - Free Internet & WARP WireGuard Generator" width="160"/>
+</p>
+
+<h1 align="center">F0rc3Run Endpoint Amnezia Scanner</h1>
+
+<p align="center">
+  An intelligent, cross-platform Python script to discover the fastest Cloudflare WARP endpoints and generate ready-to-use AmneziaWG profiles to bypass censorship.  
+  <br/><br/>
+  <b>✊️ Fighting for Free Internet Access</b>  
+  <br/><br/>
+  <a href="https://t.me/ForceRunVPN"><strong>📢 Telegram Channel</strong></a> •
+  <a href="https://www.google.com/search?q=https://github.com/F0rc3Run/F0rc3Run/issues">Report a Bug</a> •
+  <a href="https://github.com/F0rc3Run/F0rc3Run">Star the Project</a>
+</p>
+
+---
+
+## 📖 Installation & Usage Guide (English)
+
+### Step 1: Install Python & Requirements
+Make sure Python 3.7+ is installed. Create a file named `requirements.txt` with:
+```
+requests
 cryptography
 ping3
-حالا ترمینال خود را باز کرده و دستور زیر را برای نصب کتابخانه‌های لازم اجرا کنید:pip install -r requirements.txt
-مرحله ۲: راهنمای مخصوص هر سیستم‌عامل<details><summary><strong>🖥️ ویندوز</strong></summary>نصب پایتون: پایتون را از وب‌سایت رسمی دانلود و نصب کنید. نکته بسیار مهم: هنگام نصب، حتماً تیک گزینه "Add Python to PATH" را بزنید.اجرا با دسترسی ادمین: اسکن پینگ نیاز به دسترسی سطح بالا دارد. شما باید اسکریپت را از طریق Command Prompt (CMD) یا PowerShell که با گزینه "Run as administrator" باز شده است، اجرا کنید.</details><details><summary><strong>🐧 لینوکس (اوبونتو، دبیان و...)</strong></summary>نصب پایتون و Pip:sudo apt update && sudo apt install python3 python3-pip -y
-اجرا با Sudo: اسکریپت برای انجام اسکن پینگ نیاز به دسترسی روت دارد. شما باید آن را با دستور sudo اجرا کنید:sudo python3 main.py
-</details><details><summary><strong>📱 اندروید (ترموکس)</strong></summary>نصب پایتون:pkg update && pkg upgrade
+```
+Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+### Step 2: OS-specific Instructions
+
+<details>
+<summary>🖥️ Windows</summary>
+
+- Download and install Python from the official website.  
+- **Important:** During installation, check "Add Python to PATH".  
+- Run script as Administrator for ping scanning.  
+  Open CMD or PowerShell with "Run as administrator".
+
+</details>
+
+<details>
+<summary>🐧 Linux</summary>
+
+```bash
+sudo apt update && sudo apt install python3 python3-pip -y
+```
+Run script with sudo:
+```bash
+sudo python3 main.py
+```
+
+</details>
+
+<details>
+<summary>📱 Android (Termux)</summary>
+
+```bash
+pkg update && pkg upgrade
 pkg install python git -y
-نیاز به دسترسی روت: به دلیل محدودیت‌های امنیتی ترموکس، اسکن پینگ فقط روی دستگاه روت شده کار می‌کند. اسکریپت برای ساخت سوکت‌های خام مورد نیاز برای پینگ، به دسترسی روت نیاز دارد.</details></details>✨ Key Features🚀 Intelligent Two-Stage Scanning:F0rc3 Scan (Broad ICMP Scan): A rapid, multi-threaded ping scan across thousands of potential IPs to quickly identify responsive endpoints with low latency.Run Scan (Focused TCP Test): A more accurate TCP connection test performed on the top candidates to verify that their WireGuard port is truly open and accessible from your network.🛡️ Censorship Circumvention: Generates a ready-to-import .zip file containing multiple AmneziaWG profiles, each using different obfuscation parameters designed to defeat deep packet inspection (DPI).💻 Cross-Platform: Fully compatible with Windows, Linux, and Android (Termux).🤖 Fully Automated & Self-Contained: No need for external files. The script includes all necessary IP ranges and Amnezia profiles. It automatically generates a new WARP account for each run.📊 Detailed Results: Saves a clean scan_results.txt file with the latency of all responsive endpoints for your own analysis.🛠️ How to Use the ScannerDownload the Script: Save the script as main.py.Run with Privileges: Open your terminal (CMD, PowerShell, or Termux) with the necessary permissions (Administrator/sudo/root).Execute the Script: Navigate to the directory where you saved the script and run it:python main.py
-Follow the Interactive Menu:The script will first welcome you and ask you to ensure your VPN is off.It will automatically generate a new WARP account.Choose between F0rc3 Scan (to scan recommended IP ranges) or Custom Scan (to enter your own list of endpoints).If you choose F0rc3 Scan, select IPv4 or IPv6.The script will perform the initial ping scan.After the scan, you can choose to Run Scan (to perform the TCP test and generate the Amnezia ZIP file) or Finish Scan.Import & Connect:Find the F0rc3Run_amnezia.zip file in the script's directory.Import this single file into your AmneziaVPN client. It will add all the generated profiles at once.Test the imported profiles to see which one works best for your network.🤍 Support the Mission for a Free InternetIf you find this project useful, you can support the goal of unrestricted internet access for everyone:⭐ Star this repository on GitHub.📢 Share the link to this tool with your friends and communities.🧑‍💻 Contribute by reporting bugs, suggesting features, or submitting pull requests.📜 LicenseThis project is licensed under the MIT License.<p align="center"><b>Internet should be a right — not a privilege.</b></p>
+```
+> **Note:** Requires root access for raw socket pings.
+
+</details>
+
+---
+
+## ✨ Key Features
+
+- **🚀 Two-Stage Scanning**  
+  - **F0rc3 Scan**: Broad ICMP ping scan across thousands of IPs.  
+  - **Run Scan**: TCP port test on top candidates to ensure accessibility.  
+
+- **🛡️ Censorship Circumvention** – Generates `.zip` AmneziaWG profiles with multiple obfuscations.  
+- **💻 Cross-Platform** – Works on Windows, Linux, and Android (Termux).  
+- **🤖 Automated** – Includes all IP ranges, creates new WARP account per run.  
+- **📊 Detailed Results** – Saves clean `scan_results.txt` with latency data.
+
+---
+
+## 🛠️ How to Use
+
+1. Download `main.py`.  
+2. Open terminal with necessary privileges (`Administrator` / `sudo` / root).  
+3. Run:
+```bash
+python main.py
+```
+4. Follow interactive menu:
+   - Disable VPN before scanning.
+   - Choose **F0rc3 Scan** or **Custom Scan**.
+   - Select IPv4 or IPv6.
+   - After initial scan, choose **Run Scan** to generate Amnezia profiles.
+5. Import `F0rc3Run_amnezia.zip` into AmneziaVPN and connect.
+
+---
+
+## 🤍 Support Free Internet
+
+- ⭐ Star this repo.  
+- 📢 Share with friends and communities.  
+- 🧑‍💻 Contribute: report bugs, suggest features, submit PRs.
+
+---
+
+## 📜 License
+This project is licensed under the **ForceRun Free Access License (FFAL)**.
+
+📄 [View License Details](https://raw.githubusercontent.com/F0rc3Run/F0rc3Run/refs/heads/main/LICENSE)
+
+---
+
+
+<p align="center"><b>Internet should be a right — not a privilege.</b></p>
+
+---
+
+## 🇮🇷 راهنمای نصب و استفاده (فارسی)
+
+<div dir="rtl">
+
+### مرحله ۱: نصب پایتون و پیش‌نیازها
+ابتدا مطمئن شوید که **Python 3.7 یا بالاتر** روی سیستم شما نصب است.  
+یک فایل با نام `requirements.txt` بسازید و این مقادیر را در آن قرار دهید:
+```
+requests
+cryptography
+ping3
+```
+سپس در ترمینال اجرا کنید:
+```bash
+pip install -r requirements.txt
+```
+
+### مرحله ۲: راهنمای مخصوص هر سیستم‌عامل
+
+<details>
+<summary>🖥️ ویندوز</summary>
+
+- پایتون را از سایت رسمی دانلود و نصب کنید.  
+- **نکته مهم:** گزینه "Add Python to PATH" را فعال کنید.  
+- برای اجرای اسکن پینگ باید اسکریپت را در CMD یا PowerShell که با گزینه "Run as administrator" باز شده اجرا کنید.
+
+</details>
+
+<details>
+<summary>🐧 لینوکس</summary>
+
+```bash
+sudo apt update && sudo apt install python3 python3-pip -y
+```
+برای اجرای اسکریپت با دسترسی روت:
+```bash
+sudo python3 main.py
+```
+
+</details>
+
+<details>
+<summary>📱 اندروید (ترموکس)</summary>
+
+```bash
+pkg update && pkg upgrade
+pkg install python git -y
+```
+> **توجه:** به دلیل نیاز به ساخت سوکت خام برای پینگ، این قابلیت فقط روی دستگاه‌های روت شده کار می‌کند.
+
+</details>
+
+---
+
+### ✨ ویژگی‌ها
+- **🚀 اسکن دو مرحله‌ای**  
+  - **F0rc3 Scan:** اسکن سریع پینگ برای شناسایی IP‌های پاسخگو.  
+  - **Run Scan:** تست دقیق TCP برای بررسی دسترسی واقعی.  
+- **🛡️ عبور از فیلترینگ** – تولید پروفایل‌های AmneziaWG با پارامترهای مختلف.  
+- **💻 چندسکویی** – پشتیبانی کامل از ویندوز، لینوکس و اندروید.  
+- **🤖 خودکار** – شامل تمام IP Rangeها و ایجاد اکانت WARP جدید در هر اجرا.  
+- **📊 نتایج دقیق** – ذخیره نتایج در فایل `scan_results.txt`.
+
+---
+
+### 🛠️ نحوه استفاده
+1. اسکریپت `main.py` را دانلود کنید.  
+2. ترمینال را با دسترسی لازم (ادمین / sudo / روت) باز کنید.  
+3. اجرا کنید:
+```bash
+python main.py
+```
+4. مراحل را دنبال کنید:
+   - قبل از شروع، VPN را خاموش کنید.  
+   - بین F0rc3 Scan و Custom Scan انتخاب کنید.  
+   - IPv4 یا IPv6 را مشخص کنید.  
+   - پس از اسکن اولیه، با Run Scan فایل ZIP را بسازید.  
+5. فایل `F0rc3Run_amnezia.zip` را در AmneziaVPN وارد کرده و متصل شوید.
+
+---
+
+### ❤️ حمایت از اینترنت آزاد
+- ⭐ ریپو را Star کنید.  
+- 📢 لینک ابزار را منتشر کنید.  
+- 🧑‍💻 با گزارش باگ یا پیشنهاد قابلیت جدید کمک کنید.
+
+---
+
+📜 **لایسنس:**
+
+📄 [FFAL](https://raw.githubusercontent.com/F0rc3Run/F0rc3Run/refs/heads/main/LICENSE)
+</div>
