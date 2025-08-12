@@ -1,84 +1,10 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/F0rc3Run/free-warp-endpoints/refs/heads/main/docs/logo.png" alt="F0rc3Run - Free Internet & WARP WireGuard Generator" width="160"/>
-</p>
-<h1 align="center">Ultimate Cloudflare WARP & WireGuard Config Generator</h1>
-<p align="center">
-  A free, open-source tool to generate secure WARP configurations for WireGuard, AmneziaWG, and Sing-Box.
-  <br/><br/>
-  <b>✊️ Fighting for Free Internet Access</b>
-  <br/><br/>
-  <a href="https://f0rc3run.github.io/free-warp-endpoints/"><strong>🚀 Live Demo Panel</strong></a> •
-  <a href="https://t.me/ForceRunVPN"><strong>📢 Telegram Channel</strong></a> •
-  <a href="https://github.com/F0rc3Run/free-warp-endpoints/issues">Report a Bug</a>
-</p>
-
----
-
-## 🌍 About This Project
-
-The **Ultimate WARP Generator** is a powerful, web-based tool designed to provide a seamless experience for creating, managing, and sharing custom **Cloudflare WARP** configurations. My mission is to empower users to easily bypass censorship and access a secure, private, and unrestricted internet.
-
-This generator automates the entire process of creating a WARP account and exporting the configuration into multiple formats, saving you from complex manual steps. Whether you need a simple **WireGuard config** or an advanced setup for **Sing-Box**, this tool has you covered.
-
----
-
-## ✨ Key Features
-
-This generator is packed with features to give you full control over your free VPN configurations:
-
-* **🚀 Instant WARP Account Generation:** Create new, private Cloudflare WARP accounts with a single click. No registration required.
-
-* **📁 Multi-Format Config Export:** Get your free WARP config in multiple popular formats:
-    * **Standard WireGuard:** For universal compatibility with the official WireGuard clients on all platforms (Windows, macOS, Linux, Android, iOS).
-    * **AmneziaWG:** Includes pre-configured Jitter settings for enhanced stability and performance on restricted or high-latency networks.
-    * **Sing-Box:** A complete JSON configuration with **URL-Test** enabled to automatically select the fastest, lowest-latency endpoint for optimal speed.
-
-* **🗂️ Full Configuration Management:** Don't lose your configs. The tool uses your browser's local storage to:
-    * Save multiple WARP accounts with custom names.
-    * Easily switch between, rename, or delete saved configurations.
-
-* **🔄 Automatic Endpoint Updates:** Fetch the latest list of working Cloudflare endpoints at any time to ensure your connection is always fast and reliable.
-
-* **📱 QR Code & Sharing Support:**
-    * Instantly import configs to your mobile device by scanning a QR code.
-    * Share your configuration with others using a temporary, one-hour share link.
-
----
-
-## 🚀 How to Use the Generator
-
-Getting your own private WARP config is incredibly simple:
-
-1.  **Go to the Panel:** Open the [**Live Demo Panel**](https://f0rc3run.github.io/free-warp-endpoints/).
-2.  **Generate Config:** Click the **"Generate First Config"** button to create your new WARP account.
-3.  **Save & Name:** Give your configuration a memorable name and save it.
-4.  **Choose Your Format:** Select the tab for the format you need (Standard WG, AmneziaWG, or Sing-Box).
-5.  **Import & Connect:**
-    * **Copy** the text configuration.
-    * **Download** the `.conf` or `.json` file.
-    * **Scan** the QR code with your mobile client (e.g., V2rayNG, Nekobox, Hiddify, WireGuard).
-6.  **Enjoy the Free Internet!** You are now connected through a secure and private tunnel.
-
----
-
-## 🤍 Support the Mission for a Free Internet
-
-If you find this project useful, you can support the goal of unrestricted internet access for everyone:
-
-* ⭐ **Star** this repository on GitHub.
-* 📢 **Share** the link to this tool with your friends and communities.
-* 🧑‍💻 **Contribute** by reporting bugs, suggesting features, or submitting pull requests.
-
----
-
-## 📜 License
-
-This project is licensed under the **ForceRun Free Access License (FFAL)**.
-
-📄 [View License Details](https://raw.githubusercontent.com/F0rc3Run/F0rc3Run/refs/heads/main/LICENSE)
-
----
-
-<p align="center">
-   <b>Internet should be a right — not a privilege.</b>
-</p>
+<p align="center"><img src="https://raw.githubusercontent.com/F0rc3Run/free-warp-endpoints/refs/heads/main/docs/logo.png" alt="F0rc3Run - Free Internet & WARP WireGuard Generator" width="160"/></p><h1 align="center">F0rc3Run Endpoint Amnezia Scanner</h1><p align="center">An intelligent, cross-platform Python script to discover the fastest Cloudflare WARP endpoints and generate ready-to-use AmneziaWG profiles to bypass censorship.<br/><br/><b>✊️ Fighting for Free Internet Access</b><br/><br/><a href="https://t.me/ForceRunVPN"><strong>📢 Telegram Channel</strong></a> •<a href="https://www.google.com/search?q=https://github.com/F0rc3Run/F0rc3Run/issues">Report a Bug</a> •<a href="https://github.com/F0rc3Run/F0rc3Run">Star the Project</a></p><details><summary><strong>راهنمای نصب و راه‌اندازی (برای کاربران فارسی‌زبان)</strong></summary>🚀 شروع سریعاین اسکریپت یک ابزار قدرتمند خط فرمان برای پیدا کردن بهترین اندپوینت‌های WARP و ساخت کانفیگ‌های Amnezia است. برای اجرای آن، مراحل زیر را دنبال کنید.مرحله ۱: نصب پایتون و پیش‌نیازهاابتدا مطمئن شوید پایتون ۳.۷ یا بالاتر روی سیستم شما نصب است. سپس، یک فایل با نام requirements.txt بسازید و محتوای زیر را در آن کپی کنید:requests
+cryptography
+ping3
+حالا ترمینال خود را باز کرده و دستور زیر را برای نصب کتابخانه‌های لازم اجرا کنید:pip install -r requirements.txt
+مرحله ۲: راهنمای مخصوص هر سیستم‌عامل<details><summary><strong>🖥️ ویندوز</strong></summary>نصب پایتون: پایتون را از وب‌سایت رسمی دانلود و نصب کنید. نکته بسیار مهم: هنگام نصب، حتماً تیک گزینه "Add Python to PATH" را بزنید.اجرا با دسترسی ادمین: اسکن پینگ نیاز به دسترسی سطح بالا دارد. شما باید اسکریپت را از طریق Command Prompt (CMD) یا PowerShell که با گزینه "Run as administrator" باز شده است، اجرا کنید.</details><details><summary><strong>🐧 لینوکس (اوبونتو، دبیان و...)</strong></summary>نصب پایتون و Pip:sudo apt update && sudo apt install python3 python3-pip -y
+اجرا با Sudo: اسکریپت برای انجام اسکن پینگ نیاز به دسترسی روت دارد. شما باید آن را با دستور sudo اجرا کنید:sudo python3 main.py
+</details><details><summary><strong>📱 اندروید (ترموکس)</strong></summary>نصب پایتون:pkg update && pkg upgrade
+pkg install python git -y
+نیاز به دسترسی روت: به دلیل محدودیت‌های امنیتی ترموکس، اسکن پینگ فقط روی دستگاه روت شده کار می‌کند. اسکریپت برای ساخت سوکت‌های خام مورد نیاز برای پینگ، به دسترسی روت نیاز دارد.</details></details>✨ Key Features🚀 Intelligent Two-Stage Scanning:F0rc3 Scan (Broad ICMP Scan): A rapid, multi-threaded ping scan across thousands of potential IPs to quickly identify responsive endpoints with low latency.Run Scan (Focused TCP Test): A more accurate TCP connection test performed on the top candidates to verify that their WireGuard port is truly open and accessible from your network.🛡️ Censorship Circumvention: Generates a ready-to-import .zip file containing multiple AmneziaWG profiles, each using different obfuscation parameters designed to defeat deep packet inspection (DPI).💻 Cross-Platform: Fully compatible with Windows, Linux, and Android (Termux).🤖 Fully Automated & Self-Contained: No need for external files. The script includes all necessary IP ranges and Amnezia profiles. It automatically generates a new WARP account for each run.📊 Detailed Results: Saves a clean scan_results.txt file with the latency of all responsive endpoints for your own analysis.🛠️ How to Use the ScannerDownload the Script: Save the script as main.py.Run with Privileges: Open your terminal (CMD, PowerShell, or Termux) with the necessary permissions (Administrator/sudo/root).Execute the Script: Navigate to the directory where you saved the script and run it:python main.py
+Follow the Interactive Menu:The script will first welcome you and ask you to ensure your VPN is off.It will automatically generate a new WARP account.Choose between F0rc3 Scan (to scan recommended IP ranges) or Custom Scan (to enter your own list of endpoints).If you choose F0rc3 Scan, select IPv4 or IPv6.The script will perform the initial ping scan.After the scan, you can choose to Run Scan (to perform the TCP test and generate the Amnezia ZIP file) or Finish Scan.Import & Connect:Find the F0rc3Run_amnezia.zip file in the script's directory.Import this single file into your AmneziaVPN client. It will add all the generated profiles at once.Test the imported profiles to see which one works best for your network.🤍 Support the Mission for a Free InternetIf you find this project useful, you can support the goal of unrestricted internet access for everyone:⭐ Star this repository on GitHub.📢 Share the link to this tool with your friends and communities.🧑‍💻 Contribute by reporting bugs, suggesting features, or submitting pull requests.📜 LicenseThis project is licensed under the MIT License.<p align="center"><b>Internet should be a right — not a privilege.</b></p>
