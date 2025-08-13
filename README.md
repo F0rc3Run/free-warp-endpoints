@@ -50,7 +50,7 @@ sudo apt update && sudo apt install python3 python3-pip -y
 ```
 Run script with sudo:
 ```bash
-sudo python3 main.py
+sudo python3 FREAS.py
 ```
 
 </details>
@@ -72,7 +72,7 @@ pkg install python git -y
 
 - **🚀 Two-Stage Scanning**  
   - **F0rc3 Scan**: Broad ICMP ping scan across thousands of IPs.  
-  - **Run Scan**: TCP port test on top candidates to ensure accessibility.  
+  - **Run Scan**: Generate Amnezia configs with top-performing endpoints and anti-censorship settings.  
 
 - **🛡️ Censorship Circumvention** – Generates `.zip` AmneziaWG profiles with multiple obfuscations.  
 - **💻 Cross-Platform** – Works on Windows, Linux, and Android (Termux).  
@@ -83,11 +83,11 @@ pkg install python git -y
 
 ## 🛠️ How to Use
 
-1. Download `main.py`.  
+1. Download `FREAS.py`.  
 2. Open terminal with necessary privileges (`Administrator` / `sudo` / root).  
 3. Run:
 ```bash
-python main.py
+python FREAS.py
 ```
 4. Follow interactive menu:
    - Disable VPN before scanning.
@@ -154,7 +154,7 @@ sudo apt update && sudo apt install python3 python3-pip -y
 ```
 برای اجرای اسکریپت با دسترسی روت:
 ```bash
-sudo python3 main.py
+sudo python3 FREAS.py
 ```
 
 </details>
@@ -174,8 +174,12 @@ pkg install python git -y
 
 ### ✨ ویژگی‌ها
 - **🚀 اسکن دو مرحله‌ای**  
-  - **F0rc3 Scan:** اسکن سریع پینگ برای شناسایی IP‌های پاسخگو.  
-  - **Run Scan:** تست دقیق TCP برای بررسی دسترسی واقعی.  
+  - **F0rc3 Scan**
+  - شناسایی اندپوینت های پاسخگو (تست پینگ). 
+
+   - **Run Scan**
+  - تولید کانفیگ های amnezia با اندپوینت های برتر و تنظیمات ضد سانسور.  
+
 - **🛡️ عبور از فیلترینگ** – تولید پروفایل‌های AmneziaWG با پارامترهای مختلف.  
 - **💻 چندسکویی** – پشتیبانی کامل از ویندوز، لینوکس و اندروید.  
 - **🤖 خودکار** – شامل تمام IP Rangeها و ایجاد اکانت WARP جدید در هر اجرا.  
@@ -184,11 +188,11 @@ pkg install python git -y
 ---
 
 ### 🛠️ نحوه استفاده
-1. اسکریپت `main.py` را دانلود کنید.  
+1. اسکریپت `FREAS.py` را دانلود کنید.  
 2. ترمینال را با دسترسی لازم (ادمین / sudo / روت) باز کنید.  
 3. اجرا کنید:
 ```bash
-python main.py
+python FREAS.py
 ```
 4. مراحل را دنبال کنید:
    - قبل از شروع، VPN را خاموش کنید.  
