@@ -39,7 +39,7 @@ Grab the latest version for your operating system from the **[Releases](https://
 ### **2. Create Required Files**
 Place the following two files in the same directory as the executable:
 
--   **`config.yaml`:** The main configuration file. Create it by copying the `config.example.yaml` file from this repository.
+-   **`config.yaml`:** The main configuration file.
 -   **`sources_ipv4.txt`:** A text file containing a list of Cloudflare IP ranges to scan. Each CIDR range should be on a new line.
 
 ### **3. Run **
@@ -54,7 +54,7 @@ After the test is complete, the results will be displayed and saved to `result.t
 
 ## 🔧 Configuration (`config.yaml`)
 
-To configure the scanner, copy the `config.example.yaml` from this repository to a new file named `config.yaml`. This file allows you to control all aspects of the test.
+To configure the scanner, follow the `config.yaml`. This file allows you to control all aspects of the test.
 
 Key settings include:
 -   `worker_count`: The number of concurrent threads for scanning.
