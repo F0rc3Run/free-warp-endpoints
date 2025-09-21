@@ -8,7 +8,7 @@ A powerful and intelligent tool designed to scan, test, and discover the **best-
 
 ---
 
-## 🚀 About The Project
+## 🚀 About The Tool
 
 Cloudflare WARP is an excellent service for a fast and secure internet connection. However, not all WARP servers (endpoints) offer the same level of performance. Manually finding a server with the **lowest latency (ping)** and **highest download speed** is a difficult and time-consuming task.
 
