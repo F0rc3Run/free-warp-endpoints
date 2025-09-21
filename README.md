@@ -44,8 +44,8 @@ Place the following two files in the same directory as the executable:
 
 ### **3. Run **
 Execute the program and choose your desired test from the menu:
-1.  **IPv4 (Speed Test Only):** A quick scan based only on download speed.
-2.  **IPv4 (Speed + Latency Test):** A complete scan that measures both speed and ping (Recommended).
+1.  **IPv4 (Speed Test Only):** A quick scan based only on download speed (Recommended).
+2.  **IPv4 (Speed + Latency Test):** A complete scan that measures both speed and ping.
 3.  **Custom:** Manually enter endpoints to test.
 
 After the test is complete, the results will be displayed and saved to `result.txt`. You can then choose to generate your WireGuard configuration file.
