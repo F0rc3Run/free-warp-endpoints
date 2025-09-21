@@ -6,7 +6,7 @@
 
 A powerful and intelligent tool designed to scan, test, and discover the **best-performing Cloudflare WARP endpoints**. It automatically generates a **WireGuard configuration file** optimized for a fast and stable connection.
 
-![EndpointWireGuardScanner Screenshot](assets/screenshot.png)
+![EndpointWireGuardScanner Screenshot](assets/screenshot.jpg)
 
 ---
 
