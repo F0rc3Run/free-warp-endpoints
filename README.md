@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/F0rc3Run/free-warp-endpoints/refs/heads/main/docs/logo.png" alt="F0rc3Run - Free Internet & WARP WireGuard Generator" width="160"/>
+  <img src="https://raw.githubusercontent.com/F0rc3Run/free-warp-endpoints/refs/heads/main/assets/Warp Endpoint Wireguard Scanner.png" alt="F0rc3Run - Free Internet & WARP WireGuard Generator" width="160"/>
 </p>
-
-<h1 align="center">Warp Endpoint Wireguard Scanner</h1>
 
 A powerful and intelligent tool designed to scan, test, and discover the **best-performing Cloudflare WARP endpoints**. It automatically generates a **WireGuard configuration file** optimized for a fast and stable connection.
 
