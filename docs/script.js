@@ -42,19 +42,56 @@ document.addEventListener('DOMContentLoaded', () => {
     const extractKey = (data, keyName) => data.match(new RegExp(`${keyName}:\\s(.+)`))?.[1].trim() || null;
 
     async function fetchAccountFromWorker() {
-        setStatus(`Registering new WARP account...`);
-        const keygenResponse = await fetch('https://corsproxy.io/?url=https://api.cloudflareclient.com/v0a4005/reg');
-        if (!keygenResponse.ok) throw new Error('Keygen failed');
-        const keyData = await keygenResponse.text();
-        const privateKey = extractKey(keyData, 'PrivateKey'), publicKey = extractKey(keyData, 'PublicKey');
-        const installId = generateRandomString(22);
-        const response = await fetch('https://corsproxy.io/?url=https://api.cloudflareclient.com/v0a4005/reg', {
-            method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ key: publicKey, install_id: installId, fcm_token: `${installId}:APA91b${generateRandomString(134)}`, tos: new Date().toISOString(), type: 'Android', locale: 'en_US' }),
-        });
-        if (!response.ok) throw new Error(`API Account failed: ${response.status}`);
-        const accountData = await response.json();
-        return { privateKey, v4: accountData.config.interface.addresses.v4, v6: accountData.config.interface.addresses.v6, peerPublicKey: accountData.config.peers[0].public_key, reserved: Array.from(atob(accountData.config.client_id)).map(c => c.charCodeAt(0)) };
+    setStatus(`Registering new WARP account...`);
+    
+    
+    
+    const PROXY_URL = 'https://corsproxy.io/?url=https://api.cloudflareclient.com/v0a2222/reg'; 
+
+    
+    const installId = Array.from({ length: 22 }, () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.charAt(Math.floor(Math.random() * 62))).join('');
+    const fcmToken = `${installId}:APA91b` + Array.from({ length: 134 }, () => 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.charAt(Math.floor(Math.random() * 62))).join('');
+    const tos = new Date().toISOString().replace('Z', '+00:00');
+
+    const response = await fetch(PROXY_URL, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'User-Agent': 'okhttp/3.12.1' 
+        },
+        body: JSON.stringify({
+            install_id: installId,
+            fcm_token: fcmToken,
+            tos: tos,
+            type: 'Android',
+            locale: 'en_US'
+        })
+    });
+
+    if (!response.ok) {
+        
+        const errorData = await response.text();
+        console.error("API Call Failed:", response.status, errorData);
+        throw new Error(`API Call Failed: ${response.status}. ${errorData}`);
+    }
+    
+    const accountData = await response.json();
+
+    
+    if (!accountData.config || !accountData.config.interface || !accountData.config.peers) {
+        console.error("Unexpected API response:", accountData);
+        throw new Error("Received an unexpected response. Missing config data.");
+    }
+
+    
+    return {
+        privateKey: accountData.config.interface.private_key,
+        v4: accountData.config.interface.addresses.v4,
+        v6: accountData.config.interface.addresses.v6,
+        peerPublicKey: accountData.config.peers[0].public_key,
+        reserved: Array.from(atob(accountData.token)).map(c => c.charCodeAt(0)) 
+    };
     }
 
     async function fetchAllEndpoints() {
