@@ -42,13 +42,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const extractKey = (data, keyName) => data.match(new RegExp(`${keyName}:\\s(.+)`))?.[1].trim() || null;
 
     async function fetchAccountFromWorker() {
-        setStatus(t('registeringAccount'));
-        const keypair = await generateWireGuardKeypair();
-        const privateKey = keypair.privateKey, publicKey = keypair.publicKey;
-        const installId = generateRandomString(22);
-        const response = await fetch('https://corsproxy.io/?url=https://api.cloudflareclient.com/v0a4005/reg', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ key: publicKey, install_id: installId, fcm_token: `${installId}:APA91b${generateRandomString(134)}`, tos: new Date().toISOString(), type: 'Android', locale: 'en_US' }), });
-        if (!response.ok) throw new Error(`API Account failed: ${response.status}`); const accountData = await response.json();
-        return { privateKey, v4: accountData.config.interface.addresses.v4, v6: accountData.config.interface.addresses.v6, peerPublicKey: accountData.config.peers[0].public_key, reserved: Array.from(atob(accountData.config.client_id)).map(c => c.charCodeAt(0)) };
+    setStatus(`Registering new WARP account...`);
+    
+    
+    const YOUR_NEW_WORKER_URL = 'https://f0rc3run.endpointcache.workers.dev/'; 
+
+    const response = await fetch(YOUR_NEW_WORKER_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    });
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Worker failed:", response.status, errorText);
+        throw new Error(`Worker failed: ${response.status}. ${errorText}`);
+    }
+    
+    const accountData = await response.json();
+
+    if (!accountData.config || !accountData.config.interface || !accountData.config.peers) {
+        console.error("Unexpected API response:", accountData);
+        throw new Error("Received an unexpected response from the worker. Missing config data.");
+    }
+
+    return {
+        privateKey: accountData.config.interface.private_key,
+        v4: accountData.config.interface.addresses.v4,
+        v6: accountData.config.interface.addresses.v6,
+        peerPublicKey: accountData.config.peers[0].public_key,
+        reserved: Array.from(atob(accountData.token)).map(c => c.charCodeAt(0))
+    };
     }
 
     async function fetchAllEndpoints() {
