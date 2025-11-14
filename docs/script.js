@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchAccountFromWorker() {
         setStatus(`Registering new WARP account...`);
-        const keygenResponse = await fetch('https://keygen.warp-generator.workers.dev');
+        const keygenResponse = await fetch('https://corsproxy.io/?url=https://api.cloudflareclient.com/v0a4005/reg');
         if (!keygenResponse.ok) throw new Error('Keygen failed');
         const keyData = await keygenResponse.text();
         const privateKey = extractKey(keyData, 'PrivateKey'), publicKey = extractKey(keyData, 'PublicKey');
