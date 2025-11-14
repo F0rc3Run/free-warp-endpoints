@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const keyData = await keygenResponse.text();
         const privateKey = extractKey(keyData, 'PrivateKey'), publicKey = extractKey(keyData, 'PublicKey');
         const installId = generateRandomString(22);
-        const response = await fetch('https://www.warp-generator.workers.dev/wg', {
+        const response = await fetch('https://corsproxy.io/?url=https://api.cloudflareclient.com/v0a4005/reg', {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ key: publicKey, install_id: installId, fcm_token: `${installId}:APA91b${generateRandomString(134)}`, tos: new Date().toISOString(), type: 'Android', locale: 'en_US' }),
         });
